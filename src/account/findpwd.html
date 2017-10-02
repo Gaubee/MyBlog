@@ -1,0 +1,166 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<!-- <link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/paper-stepper/paper-step.html">
+<link rel="import" href="../../bower_components/paper-stepper/paper-stepper.html">
+<link rel="import" href="../../bower_components/gold-email-input/gold-email-input.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html"> -->
+<link rel="import" href="../../bower_components/iron-media-query/iron-media-query.html">
+<!-- <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html"> -->
+
+
+<dom-module id="kb-account-findpwd">
+	<template>
+	<style>
+	:host{
+		display: block;
+	}
+	paper-card{
+		display: block;
+	}
+	paper-stepper{
+		/*height: 100%;*/
+	}
+	gold-email-input,paper-input{
+		max-width: 20em;
+		height: 60pt;
+	}
+
+	.step-content{
+		max-width: 20em;
+		margin: auto;
+	}
+	</style>
+		<iron-media-query query="(max-width: 600px)" query-matches="{{queryMatches}}"></iron-media-query>
+		<!-- <paper-card heading="密码找回">
+			<paper-stepper class="card-content" vertical=[[queryMatches]] linear selected="0" has-back-button back-text="上一步" continue-text="提交" finish-text="完成" update-text="重新提交">
+				<paper-step id="step-InputAccountEmail" label="第 1 步" editable>
+					<div class="step-content">
+						<h1>输入要找回的帐号</h1>
+						<gold-email-input id="account-email" label="注册邮箱" required auto-validate></gold-email-input>
+					</div>
+					<paper-toast id="toast-val-code-sending" text="验证码正发往您的邮箱，请稍后……"></paper-toast>
+					<paper-toast id="toast-val-code-sended" text="验证码已发送，请检查邮箱"></paper-toast>
+				</paper-step>
+				<paper-step id="step-InputVerCode" label="第 2 步" editable >
+					<div class="step-content">
+						<h1>输入验证码</h1>
+						<p>请输入注册邮箱收到的验证码</p>
+						<paper-input id="verification-code" label="验证码" required error-message="验证码不可为空"></paper-input>
+					</div>
+					<paper-toast id="toast-val-code-checking" text="验证码校验，请稍后……"></paper-toast>
+					<paper-toast id="toast-val-code-checked-error" text="验证码有误，请重新输入"></paper-toast>
+				</paper-step>
+				<paper-step id="step-ResetPWD" label="第 3 步" editable>
+					<div class="step-content">
+						<h1>重置密码</h1>
+						<paper-input type="password" label="新密码"></paper-input>
+						<paper-input type="password" label="确认新密码"></paper-input>
+					</div>
+				</paper-step>
+			</paper-stepper>
+			<div class="card-actions">
+				<paper-button on-tap="goLogin"><iron-icon icon="arrow-back"></iron-icon>返回登录</paper-button>
+				<paper-button on-tap="goRegister" style="float:right;"><iron-icon icon="arrow-forward"></iron-icon>注册新帐号</paper-button>
+			</div>
+		</paper-card> -->
+	</template>
+	<script>
+		class KbAccountFindpwd extends Polymer.Element {
+			static get is() {
+				return "kb-account-findpwd";
+			}
+			static get properties() {
+				return {
+					step: {
+						type: Number,
+						value: 2
+					},
+					is_vertical: {
+						type: Boolean
+					}
+				};
+			}
+			goLogin() {
+				routeJumpTo("/account/login");
+			}
+			goRegister() {
+				routeJumpTo("/account/register");
+			}
+			ready() {
+				super.ready();
+				return
+				var $stepper = this.shadowRoot.querySelector("paper-stepper");
+				var $InputAccountEmail = this.shadowRoot.querySelector(
+					"#step-InputAccountEmail"
+				);
+				var $InputVerCode = this.shadowRoot.querySelector("#step-InputVerCode");
+				var $ResetPWD = this.shadowRoot.querySelector("#step-ResetPWD");
+				function val_lock() {
+					return false;
+				}
+				function val_pass() {
+					return true;
+				}
+				$InputAccountEmail._getValidity = function _1() {
+					var inputNode = $InputAccountEmail.querySelector("#account-email");
+					if (inputNode.validate()) {
+						inputNode.disabled = true;
+						$InputAccountEmail._getValidity = val_lock;
+
+						//显示提示
+						$InputAccountEmail
+							.querySelector("#toast-val-code-sending")
+							.open();
+						setTimeout(function() {
+							inputNode.disabled = false;
+
+							//显示提示
+							$InputAccountEmail
+								.querySelector("#toast-val-code-sended")
+								.open();
+
+							//下一步
+							$InputAccountEmail._getValidity = val_pass;
+							$stepper.continue();
+							$InputAccountEmail._getValidity = _1;
+						}, 2000);
+					}
+					return false;
+				};
+				$InputVerCode._getValidity = function _2() {
+					var inputNode = $InputVerCode.querySelector("#verification-code");
+					if (inputNode.validate()) {
+						inputNode.disabled = true;
+						$InputVerCode._getValidity = val_lock;
+
+						//显示提示
+						$InputVerCode.querySelector("#toast-val-code-checking").open();
+						setTimeout(function() {
+							inputNode.disabled = false;
+
+							if (Math.random() > 0.5) {
+								//下一步
+								$InputVerCode._getValidity = val_pass;
+								$stepper.continue();
+								$InputVerCode._getValidity = _2;
+							} else {
+								//显示提示
+								$InputVerCode
+									.querySelector("#toast-val-code-checked-error")
+									.open();
+								$InputVerCode._getValidity = val_pass;
+							}
+						});
+					}
+					return false;
+				};
+				$ResetPWD._getValidity = function _3() {
+					return false;
+				};
+			}
+		}
+		window.customElements.define(KbAccountFindpwd.is, KbAccountFindpwd);
+	</script>
+</dom-module>

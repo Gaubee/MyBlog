@@ -1,0 +1,52 @@
+{
+  "entrypoint": "index.html",
+  "shell": "src/kb-index.html",
+  "fragments": [
+    "src/kb-index.html",
+    "src/my-app.html",
+    "src/my-icons.html",
+    "src/my-view1.html",
+    "src/my-view2.html",
+    "src/my-view3.html",
+    "src/my-view404.html",
+    "src/shared-styles.html",
+    "src/account/findpwd.html",
+    "src/account/index-account.html",
+    "src/account/login.html",
+    "src/account/register.html",
+    "src/app/apps.html",
+    "src/app/friends.html",
+    "src/app/index-app.html",
+    "src/app/panle.html",
+    "src/app/setting.html",
+    "src/tool/index-tool.html",
+    "src/tool/qrcode.html",
+    "src/tool/shorturl.html"
+  ],
+  "sources": [
+    "src/**/*",
+    "images/**/*",
+    "bower.json"
+  ],
+  "extraDependencies": [
+    "manifest.json",
+    "bower_components/webcomponentsjs/*.js"
+  ],
+  "lint": {
+    "rules": ["polymer-2"]
+  },
+  "builds": [
+    {
+      "preset": "es5-bundled",
+      "basePath": true
+    },
+    {
+      "preset": "es6-bundled",
+      "basePath": true
+    },
+    {
+      "preset": "es6-unbundled",
+      "basePath": true
+    }
+  ]
+}

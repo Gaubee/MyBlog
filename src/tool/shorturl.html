@@ -1,0 +1,280 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/neon-animation/animations/scale-up-animation.html">
+<link rel="import" href="../../bower_components/neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+
+<dom-module id="kb-tool-shorturl">
+<style>
+	:host{
+	};
+	.app-container{
+		/*padding:1vw 0 0 1vw;*/
+		padding-left: 1%;
+		padding-top: 1%;
+		display: flex;
+		flex-wrap: wrap;
+		width: 100%;
+		box-sizing: border-box;
+	}
+	.seivce-card{
+		width: 49%;
+		margin-bottom: 1%;
+		margin-right: 1%;
+		flex: none;
+	}
+	@media (max-width: 600px){
+		.seivce-card{
+			width: 99%;
+			margin-bottom: 2%;
+		}
+	}
+	@media (min-width: 900px){
+		.seivce-card{
+			width: 32.3%;
+		}
+	}
+	.seivce-card[disabled]{
+		color:red;
+		background-color: gray;
+	}
+	.sevice-header { @apply(--paper-font-headline); }
+	.sevice-light { color: var(--paper-grey-600); }
+	.sevice-location {
+		float: right;
+		font-size: 15px;
+		vertical-align: middle;
+	}
+	.sevice-reserve { color: var(--google-blue-500); }
+	iron-icon.star {
+		--iron-icon-width: 16px;
+		--iron-icon-height: 16px;
+		color: var(--paper-amber-500);
+	}
+	iron-icon.star:last-of-type { color: var(--paper-grey-500); }
+	paper-progress{
+		position: absolute;width: 100%;
+		top:0;
+		left: 0
+	}
+</style>
+	<template>
+	<div class="app-container">
+
+		<template is="dom-repeat" items="{{short_sevices}}">
+			<paper-card class="seivce-card" disabled="{{item.disabled}}" alt="[[item.name]]" heading="[[item.title]]"><!-- image="./donuts.png" -->
+				<div class="card-content">
+					<paper-input value="{{item.long_url::input}}" label="请输入您的链接地址" disabled$="{{item.disabled}}" >
+						<div prefix>{{helperShowInputPrefix(item.long_url)}}</div>
+						<paper-icon-button suffix icon="clear" on-tap="clearText" disabled$="{{!item.long_url.length}}"></paper-icon-button>
+					</paper-input>
+				</div>
+				<div class="card-actions">
+					<paper-progress min=0 max=1 hidden=[[!item.is_generate]]></paper-progress>
+					<paper-button disabled$="{{item.button_unpressable}}" on-tap="generateShortUrl">{{helperShowButtonText(item.is_generate)}}</paper-button>
+				</div>
+			</paper-card>
+		</template>
+		<paper-dialog opened="[[show_shorturl]]" id="animated" entry-animation="scale-up-animation" exit-animation="fade-out-animation" > <!-- with-backdrop -->
+			<h2>生成的短地址链接如下：</h2>
+			<paper-input id="generate_shorturl_shower" value="[[generate_shorturl]]" >
+				<paper-icon-button id="copyButton" suffix icon="content-copy" on-tap="copyShortUrl"></paper-icon-button>
+			</paper-input>
+		</paper-dialog>
+		<paper-toast opened=[[toast_opened.0]] text="短地址生成中，请稍等……"></paper-toast>
+		<paper-toast opened=[[toast_opened.1]] text="短地址生成完成！"></paper-toast>
+		<paper-toast opened=[[toast_opened.2]] text="短地址生成失败：[[toast_opened.2]]！"></paper-toast>
+		<paper-toast opened=[[toast_opened.3]] text="未输入长链接，生成失败"></paper-toast>
+		<paper-toast opened=[[toast_opened.4]] text="输入长链接格式有误！"></paper-toast>
+		<paper-toast opened=[[toast_opened.5]] text="复制完成！"></paper-toast>
+		<paper-toast opened=[[toast_opened.6]] text="复制失败，请手动复制"></paper-toast>
+	</div>
+	</template>
+	<script>
+		class KbToolShorturl extends Polymer.Element{
+			static get is(){ return "kb-tool-shorturl"; }
+			static get properties(){
+				return {
+					"toast_opened": {
+						type: Array,
+						value: []
+					},
+					"short_sevices": {
+						type: Array,
+						value: [{
+							name: "weixin",
+							title: "基于微信API的短域名服务",
+							handle(long_url, cb, onprogress) {
+								if (location.protocol === "https:") {
+									var base_url = "/proxy/short.php?url=";
+								} else {
+									base_url = "http://www.youdob.com/proxy_able/short.php?url=";
+								}
+								var api_url = base_url + decodeURIComponent(long_url);
+
+								var xhr = new XMLHttpRequest;
+								xhr.open("get", api_url);
+								xhr.send();
+								xhr.onload = function() {
+									cb(null, xhr.responseText);
+								};
+								xhr.onerror = function(e) {
+									cb(e)
+								}
+								xhr.onloadstart = function(e) {
+									console.log('lengthComputable:', e.lengthComputable);
+								}
+								xhr.onprogress = onprogress
+							},
+							long_url: "", //"http://baidu.com",
+							is_generate: false,
+							_progress: 0,
+							disabled: false
+						}, {
+							name: "custom",
+							title: "Google短域名服务",
+							disabled: true
+						}]
+					}
+				}
+			}
+			static get observers(){
+				return [
+					"_isSevicesButtonPressAble(short_sevices.*)"
+				];
+			}
+			_isSevicesButtonPressAble(change){
+				if (change.path === "short_sevices") {
+					change.value.forEach((item,index)=>{
+						const path_base = change.path+"."+index;
+						this.set(path_base+".button_unpressable", item.is_generate || item.disabled)
+					});
+				}else{
+					let ends_with ;
+					if(change.path.endsWith(".is_generate")) {
+						ends_with = ".is_generate"
+					}
+					if(change.path.endsWith(".disabled")) {
+						ends_with = ".disabled"
+					}
+					if(ends_with){
+						const path_base = change.path.substr(0,change.path.length-ends_with.length)
+						this.set(path_base+".button_unpressable",
+							this.get(path_base+".is_generate") || this.get(path_base+".disabled"))
+					}
+				}
+			}
+
+			helperShowInputPrefix(is_hidden) {
+				return is_hidden ? "" : "http(s)://"
+			}
+			helperShowButtonText(is_generate) {
+				return is_generate ? "生成中……" : "生成短域名"
+			}
+			_beforeGenerate() {
+				this._showToast(0);
+			}
+			_afterGenerate() {
+				this._closeAllToast();
+				// this.set("show_shorturl",true);
+				this.$.animated.open()
+			}
+			generateShortUrl(e) {
+				var self = this;
+				var model = e.model;
+				var long_url = model.item.long_url;
+				if (!long_url) {
+					return self._showToast(3);
+				}
+				if (long_url.indexOf("http://") * long_url.indexOf("https://") !== 0) {
+					long_url = "http://" + long_url
+				}
+				if (!self.isURL(long_url)) {
+					return self._showToast(4);
+				}
+				model.set("item.is_generate", true);
+				model.set("item._progress", 0);
+				model.item.handle(long_url, function(err, res) {
+					model.set("item.is_generate", false);
+					if (err) {
+						self._showToast(2, err)
+					} else {
+						self.set("generate_shorturl", res);
+						self._afterGenerate();
+					}
+				}, function(e) {
+					if (e.lengthComputable) {
+						model.set("item._progress", e.loaded / e.total);
+					} else {
+						model.set("item._progress", 1);
+					}
+				});
+			}
+			clearText(e) {
+				e.model.set("item.long_url", "");
+			}
+			copyShortUrl() {
+				var short_url = this.get("generate_shorturl");
+
+				var snipRange = document.createRange();
+				snipRange.selectNodeContents(this.$.generate_shorturl_shower);
+				var selection = window.getSelection();
+				selection.removeAllRanges();
+				selection.addRange(snipRange);
+				var result = false;
+				try {
+					result = document.execCommand('copy');
+					this.$.copyButton.icon = 'done';
+					this._showToast(5);
+				} catch (err) {
+					// Copy command is not available
+					Polymer.Base._error(err);
+					this.$.copyButton.icon = 'error';
+					this._showToast(6);
+				}
+
+				// Return to the copy button after a second.
+				setTimeout(this._resetCopyButtonState.bind(this), 1000);
+
+				selection.removeAllRanges();
+				return result;
+			}
+			_resetCopyButtonState() {
+				this.$.copyButton.icon = 'content-copy';
+			}
+			isURL(str) {
+				var pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
+					'((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|' + // domain name
+					'((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+					'(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+					'(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+					'(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
+				return pattern.test(str);
+			}
+			_closeAllToast() {
+				var self = this;
+				var toast_opened = self.get("toast_opened");
+				toast_opened = toast_opened.map(function(v) {
+					return false
+				});
+				self.set("toast_opened", toast_opened);
+			}
+			_showToast(id, v) {
+				var self = this;
+				var toast_opened = self.get("toast_opened");
+				toast_opened = toast_opened.map(function(v) {
+					return false
+				});
+				toast_opened[id] = v || true;
+				self.set("toast_opened", toast_opened);
+			}
+		}
+		window.customElements.define(KbToolShorturl.is, KbToolShorturl);
+	</script>
+</dom-module>

@@ -1,0 +1,40 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+
+<dom-module id="kb-account-register">
+	<template>
+		<paper-card heading="注册">
+			<div class="card-content">
+				<style>
+					:host{
+						display: block;
+						max-width: 360pt;
+						margin: auto;
+					}
+					:host > paper-card{
+						width: 100%;
+					}
+				</style>
+				<paper-input label="用户名"></paper-input>
+				<paper-input label="密码" type="password"></paper-input>
+				<paper-input label="确认密码密码" type="password"></paper-input>
+			</div>
+			<div class="card-actions">
+				<paper-button raised>提交注册</paper-button>
+				<a href="/account/login" tabindex="-1">
+					<paper-button>登录</paper-button>
+				</a>
+			</div>
+		</paper-card>
+	</template>
+	<script>
+		class KbAccountRregister extends Polymer.Element {
+			static get is() {
+				return "kb-account-register";
+			}
+		}
+		window.customElements.define(KbAccountRregister.is, KbAccountRregister);
+	</script>
+</dom-module>

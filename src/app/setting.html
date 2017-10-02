@@ -1,0 +1,99 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
+
+<dom-module id="kb-app-setting">
+	<template>
+		<paper-card heading="设置">
+		TcT
+		<br>
+		TcT
+		<br>
+		TcT
+		<br>
+		TcT
+		<br>
+		TcT
+		<br>
+		TcT
+		<br>
+		TcT
+		<br>
+		TcT
+		<br>
+		TcT
+		<br>
+		TcT
+		<br>
+		TcT
+		<br>
+		<br>
+		TcT
+		<br>
+		TcT
+		<br>
+		TcT
+		<br>
+		TcT
+		<br>
+		<br>
+		TcT
+		<br>
+		TcT
+		<br>
+		TcT
+		<br>
+		TcT
+		<br>
+		<br>
+		TcT
+		<br>
+		TcT
+		<br>
+		TcT
+		<br>
+		TcT
+		<br>
+		<br>
+		TcT
+		<br>
+		TcT
+		<br>
+		TcT
+		<br>
+		TcT
+		<br>
+		<br>
+		TcT
+		<br>
+		TcT
+		<br>
+		TcT
+		<br>
+		TcT
+		<br>
+		</paper-card>
+	</template>
+	<script>
+		class KbAppSetting extends Polymer.Element{
+			static get is(){ return "kb-app-setting"; }
+			static get properties(){
+				return {
+					toast_opened:{
+						type:Array,
+						value:[]
+					},
+				}
+			}
+			_showToast (id) {
+				var toast_opened = this.get("toast_opened");
+				toast_opened = toast_opened.map(function(v){return false});
+				toast_opened[id] = true;
+				this.set("toast_opened", toast_opened);
+			}
+		}
+		window.customElements.define(KbAppSetting.is, KbAppSetting);
+	</script>
+</dom-module>

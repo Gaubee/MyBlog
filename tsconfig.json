@@ -1,0 +1,28 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "target": "es2017",
+    "module": "esnext",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "strictNullChecks": true,
+    "noImplicitThis": true,
+    "noImplicitAny": true,
+    "sourceMap": false,
+    "outDir": "./jsrc",
+    "lib": [
+      "es2017",
+      "dom"
+    ],
+    "types": [
+      // "bower_components/polymer2-ts/polymer.d.ts"
+    ]
+  },
+  "include": [
+    "tsrc"
+  ],
+  "exclude": [
+    "bower_components/polymer2-ts/demo",
+    "bower_components/polymer2-ts"
+  ]
+}

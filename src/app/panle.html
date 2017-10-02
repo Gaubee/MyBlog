@@ -1,0 +1,99 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
+
+<dom-module id="kb-app-panle">
+	<template>
+		<paper-card heading="监控面板">
+		QwQ
+		<br>
+		QwQ
+		<br>
+		QwQ
+		<br>
+		QwQ
+		<br>
+		QwQ
+		<br>
+		QwQ
+		<br>
+		QwQ
+		<br>
+		QwQ
+		<br>
+		QwQ
+		<br>
+		QwQ
+		<br>
+		QwQ
+		<br>
+		<br>
+		QwQ
+		<br>
+		QwQ
+		<br>
+		QwQ
+		<br>
+		QwQ
+		<br>
+		<br>
+		QwQ
+		<br>
+		QwQ
+		<br>
+		QwQ
+		<br>
+		QwQ
+		<br>
+		<br>
+		QwQ
+		<br>
+		QwQ
+		<br>
+		QwQ
+		<br>
+		QwQ
+		<br>
+		<br>
+		QwQ
+		<br>
+		QwQ
+		<br>
+		QwQ
+		<br>
+		QwQ
+		<br>
+		<br>
+		QwQ
+		<br>
+		QwQ
+		<br>
+		QwQ
+		<br>
+		QwQ
+		<br>
+		</paper-card>
+	</template>
+	<script>
+		class KbAppPanel extends Polymer.Element{
+			static get is(){ return "kb-app-panle"; }
+			static get properties(){
+				return {
+					toast_opened:{
+						type:Array,
+						value:[]
+					},
+				}
+			}
+			_showToast (id) {
+				var toast_opened = this.get("toast_opened");
+				toast_opened = toast_opened.map(function(v){return false});
+				toast_opened[id] = true;
+				this.set("toast_opened", toast_opened);
+			}
+		}
+		window.customElements.define(KbAppPanel.is, KbAppPanel);
+	</script>
+</dom-module>

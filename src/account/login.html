@@ -1,0 +1,95 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
+
+<dom-module id="kb-account-login">
+	<template>
+		<paper-card heading="登录">
+			<div class="card-content">
+				<style>
+					:host {
+						display: block;
+						max-width: 360pt;
+						margin: auto;
+					}
+
+					:host>paper-card {
+						width: 100%;
+					}
+				</style>
+				<paper-input label="用户名"></paper-input>
+				<paper-input label="密码" type="password"></paper-input>
+			</div>
+			<div class="card-actions">
+				<paper-button raised id="loginButton" on-tap="login" disabled=[[wait_submit_return]]>登录</paper-button>
+				<paper-button on-tap="routeTo" data-path="/register">注册新帐号</paper-button>
+				<paper-button on-tap="routeTo" data-path="/findpwd">忘记密码</paper-button>
+			</div>
+			<paper-toast opened=[[toast_opened.0]] text="登录信息提交中，请稍候……"></paper-toast>
+			<paper-toast opened=[[toast_opened.1]] text="登录成功"></paper-toast>
+			<paper-toast opened=[[toast_opened.2]] text="登录失败，帐号不存在"></paper-toast>
+			<paper-toast opened=[[toast_opened.3]] text="登录失败，帐号与密码不匹配"></paper-toast>
+			<paper-toast opened=[[toast_opened.4]] text="登录失败，网络错误"></paper-toast>
+		</paper-card>
+	</template>
+	<script>
+		class KbAccountLogin extends Polymer.Element {
+			static get is() {
+				return "kb-account-login";
+			}
+			static get properties() {
+				return {
+					wait_submit_return: {
+						type: Boolean,
+						value: false
+					},
+					toast_opened: {
+						type: Array,
+						value: []
+					}
+				};
+			}
+			login() {
+				this.set("wait_submit_return", true);
+				this._showToast(0);
+				setTimeout(() => {
+					this.set("wait_submit_return", false);
+					var res = Math.random();
+					if (res > 0.75) {
+						this._showToast(1);
+					} else if (res > 0.5) {
+						this._showToast(2);
+					} else if (res > 0.25) {
+						this._showToast(3);
+					} else {
+						this._showToast(4);
+					}
+				}, 500);
+			}
+			_showToast(id) {
+				var toast_opened = this.get("toast_opened");
+				toast_opened = toast_opened.map(function (v) {
+					return false;
+				});
+				toast_opened[id] = true;
+				this.set("toast_opened", toast_opened);
+			}
+			/**
+			 * @param {Event} e
+			 */
+			routeTo(e) {
+				const path = e.target.dataset.path;
+				// console.log("routeTo", path);
+				if (path) {
+					/**@type {HTMLShadowElement}*/
+					const shadownRoot = this.getRootNode();
+					const hostNode = shadownRoot.host;
+					hostNode.set("route.path", path);
+				}
+			}
+		}
+		window.customElements.define(KbAccountLogin.is, KbAccountLogin);
+	</script>
+</dom-module>

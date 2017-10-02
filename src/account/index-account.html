@@ -1,0 +1,69 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/app-route/app-route.html">
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../../bower_components/paper-progress/paper-progress.html">
+<link rel="lazy-import" href="login.html">
+<link rel="lazy-import" href="register.html">
+<link rel="lazy-import" href="findpwd.html">
+
+<dom-module id="kb-account">
+	<template>
+		<style>
+			:host {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				--account-show-paper-progress: none;
+				/*底部预留空间，来避免toast的显示遮掩了太多东西*/
+				height: 92vh;
+				perspective: 1000;
+			}
+
+			.bg {
+				background-color: #00acbd;
+			}
+
+			iron-pages {
+				width: 80vw;
+				max-width: 800pt;
+			}
+
+			@media (max-width: 600px) {
+				:host {
+					height: 80vh;
+				}
+				iron-pages {
+					width: 90vw;
+				}
+				paper-progress {
+					width: 100%;
+				}
+			}
+
+			paper-progress {
+				display: var(--account-show-paper-progress);
+				position: absolute;
+			}
+
+			iron-pages {
+				perspective: 500px;
+				-webkit-perspective: 500px;
+			}
+
+			iron-pages>* {
+				perspective: 500px;
+				-webkit-perspective: 500px;
+				will-change: transform;
+				backface-visibility: hidden;
+			}
+		</style>
+		<app-route route="{{route}}" pattern="/:page" data="{{routeData}}"></app-route>
+		<paper-progress indeterminate></paper-progress>
+		<iron-pages id="iron_pages" selected="{{page}}" attr-for-selected="name">
+			<kb-account-login name="login"></kb-account-login>
+			<kb-account-register name="register"></kb-account-register>
+			<kb-account-findpwd name="findpwd"></kb-account-findpwd>
+		</iron-pages>
+	</template>
+	<script src="./index-account.js"></script>
+</dom-module>
