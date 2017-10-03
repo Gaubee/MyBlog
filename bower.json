@@ -35,7 +35,9 @@
     "paper-stepper": "polymer-paper-stepper#^1.1.0",
     "gold-email-input": "PolymerElements/gold-email-input#^1.0.9",
     "paper-styles": "PolymerElements/paper-styles#^2.0.0",
-    "polymer2-ts": "^1.2.8"
+    "polymer2-ts": "^1.2.8",
+    "iron-icon": "PolymerElements/iron-icon#^2.0.1",
+    "iron-meta": "PolymerElements/iron-meta#^2.0.2"
   },
   "resolutions": {
     "polymer": "^2.0.0"

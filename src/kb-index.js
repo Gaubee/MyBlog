@@ -9,18 +9,12 @@ class KbIndex extends RouteElement {
             rootPath: String,
         }, super.properties);
     }
-
-    static get observers() {
-        return [
-            '_routePageChanged(routeData.page)',
-        ];
-    }
     constructor() {
         super();
     }
 
     _routePageChanged(page) {
-        this.page = page || 'nav';
+        super._routePageChanged(page);
 
         // Close a non-persistent drawer when the page & route are changed.
         if (!this.$.drawer.persistent) {
@@ -30,6 +24,7 @@ class KbIndex extends RouteElement {
     get URL_MAP() {
         if (!this._URL_MAP) {
             this._URL_MAP = Object.assign({
+                "index": "kb-nav",
                 "nav": "kb-nav",
                 "account": "account/index-account",
                 "app": "app/index-app",
@@ -53,13 +48,15 @@ class KbIndex extends RouteElement {
             window.routeJumpTo(href);
         }
         // 同步page与iron-page的selected属性
-        const $iron_pages = this.$.iron_pages;
-        // console.log("index $iron_pages", $iron_pages)
-        $iron_pages.addEventListener('selected-changed', () => {
-            if ($iron_pages.selected !== this.page) {
-                this.page = $iron_pages.selected;
-            }
-        });
+        const $iron_pages = this.$ && this.$.iron_pages;
+        if ($iron_pages) {
+            // console.log("index $iron_pages", $iron_pages)
+            $iron_pages.addEventListener('selected-changed', () => {
+                if ($iron_pages.selected !== this.page) {
+                    this.page = $iron_pages.selected;
+                }
+            });
+        }
     }
 }
 window.customElements.define(KbIndex.is, KbIndex);

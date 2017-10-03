@@ -25,14 +25,15 @@ class KbAccount extends RouteElement {
         super.ready();
         // 同步page与iron-page的selected属性
         const $iron_pages = this.$.iron_pages;
-        // console.log("account $iron_pages", $iron_pages)
-        $iron_pages.addEventListener('selected-changed', ( /**@type {Event}*/ e) => {
-            e.cancelBubble = true;
-            if ($iron_pages.selected !== this.page) {
-                // console.log("account page", $iron_pages.selected, this.page)
-                this.page = $iron_pages.selected;
-            }
-        });
+        if ($iron_pages) {
+            $iron_pages.addEventListener('selected-changed', ( /**@type {Event}*/ e) => {
+                e.cancelBubble = true;
+                if ($iron_pages.selected !== this.page) {
+                    // console.log("account page", $iron_pages.selected, this.page)
+                    this.page = $iron_pages.selected;
+                }
+            });
+        }
     }
     _show_page(page) {
         page && page.classList.add("iron-selected");
@@ -176,7 +177,6 @@ class KbAccount extends RouteElement {
     get URL_MAP() {
         if (!this._URL_MAP) {
             this._URL_MAP = Object.assign({
-                view404: "../my-view404",
                 login: "login",
                 register: "register",
                 findpwd: "findpwd"

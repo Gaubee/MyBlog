@@ -4,57 +4,71 @@
 <link rel="import" href="../../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
 
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/communication-icons.html">
+
 <dom-module id="kb-app-apps">
-<style>
-	:host{
-	};
-	.app-container{
-		/*padding:1vw 0 0 1vw;*/
-		padding-left: 1%;
-		padding-top: 1%;
-		display: flex;
-		flex-wrap: wrap;
-		width: 100%;
-		box-sizing: border-box;
-	}
-	.seivce-card{
-		width: 49%;
-		margin-bottom: 1%;
-		margin-right: 1%;
-		flex: none;
-	}
-	@media (max-width: 600px){
-		.seivce-card{
-			width: 99%;
-			margin-bottom: 2%;
-		}
-	}
-	@media (min-width: 900px){
-		.seivce-card{
-			width: 32.3%;
-		}
-	}
-	.sevice-header { @apply(--paper-font-headline); }
-	.sevice-light { color: var(--paper-grey-600); }
-	.sevice-location {
-		float: right;
-		font-size: 15px;
-		vertical-align: middle;
-	}
-	.sevice-reserve { color: var(--google-blue-500); }
-	iron-icon.star {
-		--iron-icon-width: 16px;
-		--iron-icon-height: 16px;
-		color: var(--paper-amber-500);
-	}
-	iron-icon.star:last-of-type { color: var(--paper-grey-500); }
-</style>
 	<template>
-	<div class="app-container">
+		<style>
+			:host {
+				column-count: 1;
+				column-gap: 0;
+			}
+
+			.seivce-card {
+				display: block;;
+				margin-bottom: 1%;
+				margin-right: 1%;
+				flex: none;
+			}
+
+			/* @media (min-width: 600px) {
+				:host {
+					column-count: 2;
+				}
+			} */
+
+			@media (min-width: 1000px) {
+				:host {
+					column-count: 2;
+				}
+			}
+
+			@media (min-width: 1400px) {
+				:host {
+					column-count: 3;
+				}
+			}
+
+			.sevice-light {
+				color: var(--paper-grey-600);
+			}
+
+			.sevice-location {
+				float: right;
+				font-size: 15px;
+				vertical-align: middle;
+			}
+
+			.sevice-reserve {
+				color: var(--google-blue-500);
+			}
+
+			iron-icon.star {
+				--iron-icon-width: 16px;
+				--iron-icon-height: 16px;
+				color: var(--paper-amber-500);
+			}
+
+			iron-icon.star:last-of-type {
+				color: var(--paper-grey-500);
+			}
+		</style>
 		<template is="dom-repeat" items="{{seives}}">
-			<paper-card class="seivce-card" alt="Donuts" heading="Gaubee Seivce"><!-- image="./donuts.png" -->
+			<paper-card class="seivce-card" alt="Donuts" heading="Gaubee Seivce">
+				<!-- image="./donuts.png" -->
 				<div class="card-content">
-					<div class="cafe-header">Cafe Basilico
+					<div class="cafe-header">{{index}}. Cafe Basilico
 						<div class="cafe-location cafe-light">
 							<iron-icon icon="communication:location-on"></iron-icon>
 							<span>250ft</span>
@@ -82,26 +96,33 @@
 				</div>
 			</paper-card>
 		</template>
-	</div>
 	</template>
 	<script>
-		class KbAppApps extends Polymer.Element{
-			static get is(){ return "kb-app-apps"; }
-			static get properties(){
+		class KbAppApps extends Polymer.Element {
+			static get is() {
+				return "kb-app-apps";
+			}
+			static get properties() {
 				return {
-					toast_opened:{
-						type:Array,
-						value:[]
+					toast_opened: {
+						type: Array,
+						value: []
 					},
-					seives:{
-						type:Array,
-						value:Array.from({length:4})
+					seives: {
+						type: Array,
+						value: Array.from({
+							length: 12
+						}).map((v,i)=>{
+
+						})
 					}
 				}
 			}
-			_showToast (id) {
+			_showToast(id) {
 				var toast_opened = this.get("toast_opened");
-				toast_opened = toast_opened.map(function(v){return false});
+				toast_opened = toast_opened.map(function (v) {
+					return false
+				});
 				toast_opened[id] = true;
 				this.set("toast_opened", toast_opened);
 			}

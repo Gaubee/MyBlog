@@ -61,6 +61,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <meta name="msapplication-tap-highlight" content="no">
 
     <script>
+      window.addEventListener("iron-iconset-added",function(e){
+        console.log("%ciron-iconset-added","color:red;font-size:20px",e.detail);
+      })
       /**
       * [polymer-root-path]
       *
