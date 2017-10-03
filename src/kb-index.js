@@ -1,3 +1,4 @@
+
 class KbIndex extends RouteElement {
     static get is() {
         return "kb-index";
